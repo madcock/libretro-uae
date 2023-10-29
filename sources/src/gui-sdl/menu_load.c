@@ -6,7 +6,11 @@
 #include "SDL_image.h"
 #include "SDL_ttf.h"
 #include "button_mappings.h"
+#if !defined(SF2000)
 #include <dirent.h>
+#else
+#include "../..../../../dirent.h"
+#endif
 #include <stdlib.h>
 #include <string.h>
 #include <sys/stat.h>

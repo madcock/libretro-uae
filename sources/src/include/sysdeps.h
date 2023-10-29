@@ -223,7 +223,11 @@ using namespace std;
 #endif
 
 #if HAVE_DIRENT_H
+#if !defined(SF2000)
 # include <dirent.h>
+#else
+#include "../../../../../dirent.h"
+#endif
 #else
 # define dirent direct
 # if HAVE_SYS_NDIR_H
@@ -325,6 +329,7 @@ typedef int uae_s16;
 #error No 2 byte type, you lose.
 #endif
 
+#if !defined(SF2000)
 #if SIZEOF_INT == 4
 typedef unsigned int uae_u32;
 typedef int uae_s32;
@@ -333,6 +338,7 @@ typedef unsigned long uae_u32;
 typedef long uae_s32;
 #else
 #error No 4 byte type, you lose.
+#endif
 #endif
 
 typedef uae_u32 uaecptr;
