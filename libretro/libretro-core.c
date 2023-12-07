@@ -1650,15 +1650,19 @@ static void retro_set_core_options()
          "puae_gfx_colors",
          "Video > Color Depth",
          "Color Depth",
-         "'24-bit' is slower and not available on all platforms. Full restart required.",
+         "Full restart required.",
          NULL,
          "video",
          {
-            { "16bit", "Thousands (16-bit)" },
-            { "24bit", "Millions (24-bit)" },
+            { "16bit", "16-bit (RGB565)" },
+            { "24bit", "24-bit (XRGB8888)" },
             { NULL, NULL },
          },
+#if defined(VITA) || defined(__SWITCH__) || defined(DINGUX) || defined(ANDROID)
          "16bit"
+#else
+         "24bit"
+#endif
       },
       {
          "puae_vkbd_theme",
@@ -3764,14 +3768,14 @@ static void update_variables(void)
    if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var) && var.value)
    {
       opt_fpu_model = -1;
-      if (!strstr(var.value, "auto"))
-         opt_fpu_model = atoi(var.value);
-      else if (!strcmp(var.value, "cpu") && opt_cpu_model > 0)
+      if (!strcmp(var.value, "cpu") && opt_cpu_model > 0)
          opt_fpu_model = opt_cpu_model;
+      else if (!strstr(var.value, "auto"))
+         opt_fpu_model = atoi(var.value);
 
       if (opt_fpu_model && opt_cpu_model > 68030)
          opt_fpu_model = opt_cpu_model;
-      else if (opt_fpu_model < 0 && opt_cpu_model > 68020)
+      else if ((opt_fpu_model != 0 && opt_fpu_model != 68881) && opt_cpu_model > 68020)
          opt_fpu_model = 68882;
 
       if (opt_fpu_model > -1)
